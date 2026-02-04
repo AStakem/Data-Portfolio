@@ -5,6 +5,6 @@ Welcome to my repository showcasing various data analysis projects.
 *Exploratory analysis and predictive modeling for NFL game outcomes.*
 - **Tools:** R, ggplot2, tidyr
 
-### 🏥 [ARCPA Citation Report](./ARCPA_Citation_Report/ARCPA-Report_GIT.Rmd)
+### 🏥 [ARCPA Citation Report](./ARCPA_Citation_Report/ARCPA-Report_GIT.md)
 *Standardized report of accreditation actions and common citations.*
-- **Formats:** [View Online](./ARCPA-Report/ARCPA-Report_GIT.Rmd) | [Download Word](./ARCPA-Report/ARCPA_Report.docx)
+- **Formats:** [View Online](./ARCPA-Report/ARCPA-Report_GIT.md) | [Download Word](./ARCPA-Report/ARCPA_Report.docx)
