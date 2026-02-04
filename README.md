@@ -7,4 +7,4 @@ Welcome to my repository showcasing various data analysis projects.
 
 ### 🏥 [ARCPA Citation Report](./ARCPA_Citation_Report/ARCPA-Report_GIT.md)
 *Standardized report of accreditation actions and common citations.*
-- **Formats:** [View Online](./ARCPA_Citation_Report/ARCPA-Report_GIT.md) | [Download Word](./ARCPA-Report/ARCPA_Report.docx)
+- **Formats:** [View Online](./ARCPA_Citation_Report/ARCPA-Report_GIT.md) | [Download Word](./ARCPA_Citation_Report/ARCPA-Report.docx)
