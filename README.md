@@ -1,7 +1,7 @@
 # Data-Portfolio
 Welcome to my repository showcasing various data analysis projects.
 
-### 🏈 [NFL Predictive Analysis](./NFL-Predictive_Analysis/NFL-Predictive-Analysis.md)
+### 🏈 [NFL Predictive Analysis](./NFL-Predictive_Analysis/NFL-Predictive-Analysis-Portfolio-Summary.md)
 *Exploratory analysis and predictive modeling for NFL game outcomes.*
 - **Tools:** R, ggplot2, tidyr
 
