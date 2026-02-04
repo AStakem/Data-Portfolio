@@ -1,0 +1,256 @@
+---
+title: "Report on the ARC-PA 5th Edition Standards Accreditation Actions"
+author: "Andrew Stakem"
+date: "`r format(Sys.Date())`"
+output:
+  github_document
+always_allow_html: true
+knitr:
+  opts_chunk:
+    echo: false
+    warning: false
+    message: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(fig.width = 9, fig.height = 6,
+                      out.width = "100%", echo = FALSE,
+                      warning = FALSE, message = FALSE)
+pacman::p_load(pacman, dplyr, GGally, ggplot2, ggthemes,
+               ggvis, httr, lubridate, plotly, rio, lubridate,
+               rmarkdown, shiny, stringr, tidyr, readr, readxl, 
+               ymlthis, kableExtra, gridExtra, grid, tibble, knitr, flextable)
+load("D:/R-PGMG/rmarkdowns/ARC-PA Report/ARC Environment V2.RData")
+```
+
+
+The Accreditation Review Commission on Education for the Physician Assistant (ARC-PA), holds commissioner's meetings three times each year to review PA programs and discuss the accreditation actions to be taken by the commission toward each program. The actions taken are published by the commission after each meeting. The following is an analysis of the actions taken during the era of the 5th edition standards.June 2020-September 2025.
+
+
+
+## By The Numbers
+
+1.  Total Number of PA Programs 2020/2025
+2.  Programs Reviewed
+3.  Actions Taken
+
+---
+
+### **1.**
+
+The growth of PA programs in the Unites States since June of 2020 has been considerable. As of August 2025, 58 new programs are in operation, a 22.3% increase. A large proportion of those new programs came into operation between 2020 and 2022 with the growth tapering off in more recent years. But even though the growth has slowed, new programs continue to open at colleges and universities across the country.
+
+```{r}
+fig.cap="*2021 data for program growth was not available at the time of this report"
+yoy_programs <- data.frame("YR" = c(2020, 2022, 2023, 2024, 2025), 
+                           "PGM_Count" = c(260, 300, 303, 310, 318))              
+{plot(yoy_programs$YR, yoy_programs$PGM_Count, 
+      ylim = c(min(yoy_programs$PGM_Count), 
+               max(yoy_programs$PGM_Count) + 5), 
+      type = "b", 
+     main = "PA Programs 2020-2025",
+     xlab = "Year",
+     ylab = "Program Count")
+  text(yoy_programs$YR, yoy_programs$PGM_Count,
+       labels = yoy_programs$PGM_Count, pos = 3)}
+```
+
+\*2021 data for program growth was not available at the time of this report
+
+---
+
+### **2.** 
+The total number of programs reviewed by the ARC-PA Between June 2020 and June 2025 is **355**. This number includes all programs who underwent review, this includes programs who received no citations. Programs who underwent multiple review cycles during this period are counted once for each cycle that was undertaken. Two review cycles = two counts of programmatic review.
+
+---
+
+### **3.** 
+The total number of citations given by the ARC-PA between June, 2020 and September, 2025 is **2567**. This number is comprehensive of all citations that were given and does not include actions taken such as awarding changes in accreditation status or programs that were under review and did not receive any citations.
+
+---
+
+
+## 4. Analysis of the Citations
+
+The citations administered by the ARC-PA are divided into six categories according to the ARC-PA 5th Edition Standards. These categories include A standards, B, C, D, E, and Portal related Standards. The following information details the most common citations administered overall by the ARC-PA, the top citations from year to year, and the total number of citations given for each category of standard. 
+
+---
+
+**Top 10 Citations**
+
+```{r}
+
+Top10cits_df <- as.data.frame(Top10cits)
+
+library(kableExtra)
+
+Top10cits_df %>%
+  kbl(
+    caption = "Top 10 Most Common Citations Jun20-Sept25",
+    col.names = c("Standard", "n", "Standard Text"),
+    align = "lc" # Left-align text, Center-align numbers
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "bordered", "hover"),
+    full_width = FALSE # Set to FALSE for GitHub to prevent over-stretching
+  )
+
+```
+
+---
+
+
+**Top 5 Citations By Year**
+The grid below represents the top 5 standards that were cited by the ARC-PA in the given calendar year. Representing some of the change over time in priorities and programmatic needs.
+
+```{r}
+{C2020 <- ggplot(P2020, aes(x = P2020$Standard,
+                            y = P2020$n),
+                 width = 1.5,
+                 label = n) +
+    geom_col(fill = "gray") +
+    geom_text(nudge_y = 1.5, label = P2020$n) +
+    theme_classic() +
+    ggtitle("2020") +
+    labs(x = "Standard", y = "Frequency")
+  
+  
+  C2021 <- ggplot(P2021, aes(x = P2021$Standard,
+                             y = P2021$n),
+                  width = 1.5,
+                  label = n) +
+    geom_col(fill = "lightblue") +
+    geom_text(nudge_y = 3.0, label = P2021$n) +
+    theme_classic() +
+    ggtitle("2021") +
+    labs(x = "Standard", y = "Frequency")
+  
+  C2022 <- ggplot(P2022, aes(x = P2022$Standard,
+                             y = P2022$n),
+                  width = 1.5,
+                  label = n) +
+    geom_col(fill = "lightgreen") +
+    geom_text(nudge_y = 3.0, label = P2022$n) +
+    theme_classic() +
+    ggtitle("2022") +
+    labs(x = "Standard", y = "Frequency")
+  
+  C2023 <- ggplot(P2023, aes(x = P2023$Standard,
+                             y = P2023$n),
+                  width = 1.5,
+                  label = n) +
+    geom_col(fill = "lightpink") +
+    geom_text(nudge_y = 4.5, label = P2023$n) +
+    theme_classic() +
+    ggtitle("2023") +
+    labs(x = "Standard", y = "Frequency")
+  
+  C2024 <- ggplot(P2024, aes(x = P2024$Standard,
+                             y = P2024$n),
+                  width = 1.5,
+                  label = n) +
+    geom_col(fill = "yellow") +
+    geom_text(nudge_y = 3.5, label = P2024$n) +
+    theme_classic() +
+    ggtitle("2024") +
+    labs(x = "Standard", y = "Frequency")
+  
+  C2025 <- ggplot(P2025, aes(x = P2025$Standard,
+                             y = P2025$n),
+                  width = 1.5,
+                  label = n) +
+    geom_col(fill = "violet") +
+    geom_text(nudge_y = 3.0, label = P2025$n) +
+    theme_classic() +
+    ggtitle("2025") +
+    labs(x = "Standard", y = "Frequency")
+  
+  grid.arrange(C2020, C2021, C2022,
+               C2023, C2024, C2025, ncol = 3,
+               top = textGrob("Top 5 Citations By Year",
+                              gp = gpar(fontsize = 16, fontface = "bold")))
+}
+```
+
+---
+
+
+**Citation Count By Category**
+The data below represents the total number of citations made for each category of standard, A standards, B Standards, C, D, E, and PW (Program Portal/Website related standards).
+```{r}
+
+cat_table <- table(sort_std$std_cat)
+
+pw_value <- sum(cat_table[c("P", "W")], na.rm = TRUE)
+
+
+cat_df <- as.data.frame(cat_table) %>%
+  filter(!(Var1 %in% c("N", "P", "W"))) %>%
+  add_row(Var1 = "PW", Freq = pw_value)
+
+
+cat_df %>%
+  flextable() %>%
+  set_header_labels(Var1 = "Standard Category", Freq = "Frequency") %>%
+  set_caption("Citations Given By Standard Category") %>%
+  theme_zebra() %>%
+  autofit() %>%
+  width(j = 1:2, width = 2.5) %>% # Sets specific column widths in inches
+  font(fontname = "Cambria", part = "all") %>%
+  fontsize(size = 11, part = "all") %>%
+  border_inner_v(border = fp_border_default(color = "black", width = 1)) %>% 
+  border_inner_h(border = fp_border_default(color = "black", width = 1)) %>%
+  border_outer(border = fp_border_default(color = "black", width = 1))
+```
+
+---
+
+
+## Addendum: Maryland Specific Citation Analysis
+
+Beginning in June 2020 through the present there have been 89 citations levied against the six programs within the state of Maryland. These citations are found across the spectrum of standards from the ARC-PA's 5th edition. Most notably, the B standards are cited in the top 6 most common citations 3 times. (Top 6 was selected due to a drop in citation count after the 6th observation).
+
+```{r}
+top6md_df <- as.data.frame(top6md)
+
+top6md_df %>%
+  kbl(
+    caption = "Maryland Top 6 Most Common Citations Jun20-Sep25",
+    # Adjust col.names if your data frame has different column names
+    col.names = c("Standard", "n", "Standard Text"), 
+    align = "lc"
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "bordered"),
+    full_width = FALSE,
+    position = "left"
+  )
+```
+
+---
+
+The citations above tell a story of struggles with student success and learning outcomes along with procedural report or documentation related citations. With a limited number of programs in the state being reviewed at different stages of the accreditation cycle, the number of citations and overall makeup of the standards that are cited can be skewed by one program during an unfavorable review process. The standards that are cited most (5 or 4 citations) can point to larger issues within the Maryland PA educational community that need to be addressed as these standards are given as citations to multiple programs in the state and in some cases, the same program multiple times.
+
+\newpage
+
+
+## Bibliography
+
+1. Accreditation Review Commission on Education for the Physician Assistant. (2019). Accreditation Standards for Physician Assistant Education. 5th Edition. Retrieved from http://www.arc-pa.org/wp-content/uploads/2019/11/Standards-5th-Ed-Nov-2019.pdf
+2. Accreditation Review Commission on Education for the Physician Assistant. (2020). "NOTICE OF ACTIONS – ACCREDITATION STATUS (9.2.2020)". https://www.arc-pa.org/wp-content/uploads/2025/05/Accreditation-Actions-2020Ju-9.2.pdf. Accessed on: 08/27/2025.
+3. Accreditation Review Commission on Education for the Physician Assistant. (2020). "NOTICE OF ACTIONS – ACCREDITATION STATUS (1.4.2021)". https://www.arc-pa.org/wp-content/uploads/2025/05/Accreditation-Actions-2020S.pdf. Accessed on: 08/27/2025.
+4. Accreditation Review Commission on Education for the Physician Assistant. (2021). "NOTICE OF ACTIONS – ACCREDITATION STATUS (8.2.2021)". https://www.arc-pa.org/wp-content/uploads/2025/05/Accreditation-Actions-2021M-8.2.pdf. Accessed on: 08/27/2025.
+5. Accreditation Review Commission on Education for the Physician Assistant. (2021). "NOTICE OF ACTIONS – ACCREDITATION STATUS (7.26.2021)". https://www.arc-pa.org/wp-content/uploads/2025/05/Accreditation-Actions-2021J-.pdf. Accessed on: 08/27/2025.
+6. Accreditation Review Commission on Education for the Physician Assistant. (2021). "NOTICE OF ACTIONS – ACCREDITATION STATUS (12.8.2021)". https://www.arc-pa.org/wp-content/uploads/2025/05/Accreditation-Actions-2021S.pdf. Accessed on: 08/27/2025.
+7. Accreditation Review Commission on Education for the Physician Assistant. (2022). "NOTICE OF ACTIONS – ACCREDITATION STATUS (8.8.2022)". https://www.arc-pa.org/wp-content/uploads/2025/05/Accreditation-Actions-2022M.pdf. Accessed on: 08/27/2025.
+8. Accreditation Review Commission on Education for the Physician Assistant. (2022). "NOTICE OF ACTIONS – ACCREDITATION STATUS (9.9.2022)". https://www.arc-pa.org/wp-content/uploads/2025/05/Accreditation-Actions-2022J-9.12.22.pdf. Accessed on: 08/27/2025.
+9. Accreditation Review Commission on Education for the Physician Assistant. (2022). "NOTICE OF ACTIONS – ACCREDITATION STATUS (3.29.2023)". https://www.arc-pa.org/wp-content/uploads/2025/05/Accreditation-Actions-2022S.pdf. Accessed on: 08/27/2025.
+10. Accreditation Review Commission on Education for the Physician Assistant. (2023). "NOTICE OF ACTIONS – ACCREDITATION STATUS (7.17.2023)". https://www.arc-pa.org/wp-content/uploads/2025/05/Accreditation-Actions-2023M-all-programs1.2.24.pdf. Accessed on: 08/27/2025.
+11. Accreditation Review Commission on Education for the Physician Assistant. (2023). "NOTICE OF ACTIONS – ACCREDITATION STATUS (8.8.2023)". https://www.arc-pa.org/wp-content/uploads/2025/05/Accreditation-Actions-2023J.pdf. Accessed on: 08/27/2025.
+12. Accreditation Review Commission on Education for the Physician Assistant. (2023). "NOTICE OF ACTIONS – ACCREDITATION STATUS (8.8.2023)". https://www.arc-pa.org/wp-content/uploads/2025/05/Accreditation-Actions-2023S-excl-appeals.pdf. Accessed on: 08/27/2025.
+13. Accreditation Review Commission on Education for the Physician Assistant. (2024). "NOTICE OF ACTIONS – ACCREDITATION STATUS (7.18.24)". https://www.arc-pa.org/wp-content/uploads/2025/05/Accreditation-Actions-2024M-all-programs-1.pdf. Accessed on: 08/27/2025.
+14. Accreditation Review Commission on Education for the Physician Assistant. (2024). "NOTICE OF ACTIONS – ACCREDITATION STATUS (9.24.24)". https://www.arc-pa.org/wp-content/uploads/2025/05/Accreditation-Actions-2024J-all-programs.pdf. Accessed on: 08/27/2025.
+15. Accreditation Review Commission on Education for the Physician Assistant. (2024). "NOTICE OF ACTIONS – ACCREDITATION STATUS (10.4.24)". https://www.arc-pa.org/wp-content/uploads/2025/05/Accreditation-Actions-2024S-all-programs.pdf. Accessed on: 08/27/2025.
+16. Accreditation Review Commission on Education for the Physician Assistant. (2025). "NOTICE OF ACTIONS – ACCREDITATION STATUS (7.15.25)". https://www.arc-pa.org/wp-content/uploads/2025/07/Accreditation-Actions-2025M-final-1.pdf. Accessed on: 08/27/2025.
+17. Accreditation Review Commission on Education for the Physician Assistant. (2025). "NOTICE OF ACTIONS – ACCREDITATION STATUS (7.16.25)". https://www.arc-pa.org/wp-content/uploads/2025/08/Accreditation-Actions-2025J-before-recon-2.pdf. Accessed on: 08/27/2025.
+18. Accreditation Review Commission on Education for the Physician Assistant. (2025). "NOTICE OF ACTIONS – ACCREDITATION STATUS (1.7.26)". https://www.arc-pa.org/wp-content/uploads/2026/01/Accreditation-Actions-2025S-.Jan_.2026.pdf. Accessed on: 02/04/2026.
